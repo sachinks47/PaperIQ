@@ -1,0 +1,7 @@
+streamlit
+pdfplumber
+python-docx
+numpy
+plotly
+textblob
+fpdf
