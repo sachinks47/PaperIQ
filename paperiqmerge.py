@@ -9,9 +9,24 @@ import sqlite3
 import hashlib
 import json
 import datetime
+import nltk
 from collections import Counter
 from textblob import TextBlob
 from fpdf import FPDF
+
+# -----------------------------
+# Setup & Robustness Checks
+# -----------------------------
+# Ensure NLTK data is downloaded to prevent "MissingCorpusError" in TextBlob
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt', quiet=True)
+    
+try:
+    nltk.data.find('tokenizers/punkt_tab')
+except LookupError:
+    nltk.download('punkt_tab', quiet=True)
 
 # -----------------------------
 # Database Setup
