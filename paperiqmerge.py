@@ -64,6 +64,7 @@ def verify_user(username, password):
     return result
 
 def save_history(username, filename, data):
+    if username == "Guest": return
     conn = sqlite3.connect('paperiq_users.db')
     c = conn.cursor()
     date_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -496,6 +497,12 @@ def auth_page():
             if st.button("Back to Login", use_container_width=True):
                 st.session_state.auth_mode = "login"
                 st.rerun()
+                
+        st.markdown("<br><p style='text-align:center; color:#8892b0;'>OR</p>", unsafe_allow_html=True)
+        if st.button("Continue as Guest", use_container_width=True, type="secondary"):
+            st.session_state.logged_in = True
+            st.session_state.user_data = {"username": "Guest", "role": "Visitor", "gmail": "guest@paperiq"}
+            st.rerun()
 
 def main_dashboard():
     with st.sidebar:
