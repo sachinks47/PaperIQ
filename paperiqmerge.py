@@ -497,6 +497,9 @@ def main_dashboard():
                 with st.spinner("Extracting intelligence..."):
                     raw_sections, full_text = extract_sections_structured(uploaded_file)
                     data = analyze_linguistics(full_text)
+                    if not data:
+                        st.error("No readable text found in this document. Please ensure it is not an image-based PDF.")
+                        st.stop()
                     keywords = get_frequent_keywords(full_text)
                     results = {
                         "raw_sections": raw_sections,
