@@ -579,7 +579,8 @@ def main_dashboard():
         m1.markdown(f'<div class="metric-card"><div class="metric-label">Composite</div><div class="metric-value">{res["metrics"]["Composite"]}</div></div>', unsafe_allow_html=True)
         m2.markdown(f'<div class="metric-card"><div class="metric-label">Words</div><div class="metric-value">{res["stats"]["Word Count"]:,}</div></div>', unsafe_allow_html=True)
         m3.markdown(f'<div class="metric-card"><div class="metric-label">Sentences</div><div class="metric-value">{res["stats"]["Sentences"]}</div></div>', unsafe_allow_html=True)
-        m4.markdown(f'<div class="metric-card"><div class="metric-label">Originality</div><div class="metric-value">{res["metrics"]["Originality"]}</div><div class="metric-caption">ML Plagiarism Risk</div></div>', unsafe_allow_html=True)
+        risk_pct = round(100 - res["metrics"]["Originality"], 1)
+        m4.markdown(f'<div class="metric-card"><div class="metric-label">Originality</div><div class="metric-value">{res["metrics"]["Originality"]}</div><div class="metric-caption">⚠️ {risk_pct}% Plagiarism Risk</div></div>', unsafe_allow_html=True)
         m5.markdown(f'<div class="metric-card"><div class="metric-label">Sentiment</div><div class="metric-value">{s_val}</div><div class="metric-caption">{s_label}</div></div>', unsafe_allow_html=True)
 
         st.markdown("### 🏷️ Lexical Keywords")
