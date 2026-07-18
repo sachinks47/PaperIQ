@@ -188,9 +188,12 @@ def render_theme():
             [data-testid="stUploadedFile"] * { color: #0f1519 !important; }
             .stSlider * { color: #0f1519 !important; }
             [data-testid="stMetricLabel"] * { color: #0f1519 !important; }
+            [data-testid="stWidgetLabel"] p, .stTextInput label p { color: #0f1519 !important; font-weight: 600 !important; }
             [data-baseweb="input"] > div { background-color: #ffffff !important; border: 1px solid rgba(13, 148, 136, 0.3) !important; }
-            [data-baseweb="input"] input { color: #0f1519 !important; }
-            [data-baseweb="input"] input::placeholder { color: rgba(15, 21, 25, 0.5) !important; }
+            [data-baseweb="input"] > div > div { background-color: transparent !important; }
+            [data-baseweb="input"] input { color: #0f1519 !important; -webkit-text-fill-color: #0f1519 !important; }
+            [data-baseweb="input"] input::placeholder { color: rgba(15, 21, 25, 0.5) !important; -webkit-text-fill-color: rgba(15, 21, 25, 0.5) !important; }
+            [data-baseweb="icon"] svg, .stTextInput svg { fill: #0f1519 !important; color: #0f1519 !important; }
             
             .hero-title { text-align: center; margin-top: 3rem; margin-bottom: 5px; font-size: 4.5rem; font-weight: 800; line-height: 1.2; }
             .hero-highlight { background: linear-gradient(90deg, #0d9488, #0891b2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
