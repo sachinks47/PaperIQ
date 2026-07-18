@@ -188,6 +188,9 @@ def render_theme():
             [data-testid="stUploadedFile"] * { color: #0f1519 !important; }
             .stSlider * { color: #0f1519 !important; }
             [data-testid="stMetricLabel"] * { color: #0f1519 !important; }
+            [data-baseweb="input"] > div { background-color: #ffffff !important; border: 1px solid rgba(13, 148, 136, 0.3) !important; }
+            [data-baseweb="input"] input { color: #0f1519 !important; }
+            [data-baseweb="input"] input::placeholder { color: rgba(15, 21, 25, 0.5) !important; }
             
             .hero-title { text-align: center; margin-top: 3rem; margin-bottom: 5px; font-size: 4.5rem; font-weight: 800; line-height: 1.2; }
             .hero-highlight { background: linear-gradient(90deg, #0d9488, #0891b2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -569,11 +572,12 @@ def main_dashboard():
         s_val = res["stats"]["Sentiment"]
         s_label = "Positive / Assertive" if s_val > 0.1 else "Critical / Negative" if s_val < -0.1 else "Neutral / Objective"
 
-        m1, m2, m3, m4 = st.columns(4)
+        m1, m2, m3, m4, m5 = st.columns(5)
         m1.markdown(f'<div class="metric-card"><div class="metric-label">Composite</div><div class="metric-value">{res["metrics"]["Composite"]}</div></div>', unsafe_allow_html=True)
         m2.markdown(f'<div class="metric-card"><div class="metric-label">Words</div><div class="metric-value">{res["stats"]["Word Count"]:,}</div></div>', unsafe_allow_html=True)
         m3.markdown(f'<div class="metric-card"><div class="metric-label">Sentences</div><div class="metric-value">{res["stats"]["Sentences"]}</div></div>', unsafe_allow_html=True)
-        m4.markdown(f'<div class="metric-card"><div class="metric-label">Sentiment</div><div class="metric-value">{s_val}</div><div class="metric-caption">{s_label}</div></div>', unsafe_allow_html=True)
+        m4.markdown(f'<div class="metric-card"><div class="metric-label">Originality</div><div class="metric-value">{res["metrics"]["Originality"]}</div><div class="metric-caption">ML Plagiarism Risk</div></div>', unsafe_allow_html=True)
+        m5.markdown(f'<div class="metric-card"><div class="metric-label">Sentiment</div><div class="metric-value">{s_val}</div><div class="metric-caption">{s_label}</div></div>', unsafe_allow_html=True)
 
         st.markdown("### 🏷️ Lexical Keywords")
         kw_html = "".join([f'<span class="word-pill">{w} ({c})</span>' for w, c in res["keywords"]])
