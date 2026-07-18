@@ -290,7 +290,23 @@ def analyze_linguistics(text):
     sophistication = min(100, (len([w for w in words if len(w) > 7]) / word_count) * 400)
     readability = calculate_readability(text)
     
-    composite = (lang_score * 0.3) + (coherence * 0.2) + (reasoning * 0.2) + (sophistication * 0.15) + (readability * 0.15)
+    # ML Plagiarism & AI-Risk Heuristics
+    sent_lengths = [len(s.words) for s in sents]
+    burstiness = np.std(sent_lengths) if len(sent_lengths) > 1 else 0
+    unique_words = len(set(w.lower() for w in words))
+    lex_div = unique_words / word_count if word_count > 0 else 0
+    words_lower = [w.lower() for w in words]
+    if len(words_lower) >= 5:
+        from collections import Counter
+        five_grams = [" ".join(words_lower[i:i+5]) for i in range(len(words_lower)-4)]
+        repetition_ratio = sum(count - 1 for count in Counter(five_grams).values() if count > 1) / len(five_grams)
+    else:
+        repetition_ratio = 0
+        
+    plagiarism_risk = min(100, max(0, (repetition_ratio * 500) + ((1.0 - lex_div) * 50) + ((15 - burstiness) * 2 if burstiness < 15 else 0)))
+    originality = 100 - plagiarism_risk
+    
+    composite = (lang_score * 0.25) + (coherence * 0.2) + (reasoning * 0.15) + (sophistication * 0.15) + (readability * 0.1) + (originality * 0.15)
     
     return {
         "metrics": {
@@ -299,6 +315,7 @@ def analyze_linguistics(text):
             "Reasoning": round(reasoning, 1),
             "Sophistication": round(sophistication, 1),
             "Readability": round(readability, 1),
+            "Originality": round(originality, 1),
             "Composite": round(composite, 1)
         },
         "stats": {
@@ -607,6 +624,7 @@ def main_dashboard():
                     <p style="margin: 0; line-height: 1.8;"><strong>Reasoning:</strong> {res['metrics']['Reasoning']}/100</p>
                     <p style="margin: 0; line-height: 1.8;"><strong>Sophistication:</strong> {res['metrics']['Sophistication']}/100</p>
                     <p style="margin: 0; line-height: 1.8;"><strong>Readability:</strong> {res['metrics']['Readability']}/100</p>
+                    <p style="margin: 0; line-height: 1.8;"><strong>Originality (ML):</strong> {res['metrics']['Originality']}/100</p>
                 </div>
                 <hr style="border-color: rgba(45, 212, 191, 0.2); margin: 12px 0;">
                 <p style="text-align: center; margin: 0;"><strong>Overall Tone:</strong> {s_label}</p>
