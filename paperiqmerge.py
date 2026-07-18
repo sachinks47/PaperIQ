@@ -185,6 +185,9 @@ def render_theme():
             .stMarkdown p, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown span, .stMarkdown li { color: #0f1519 !important; }
             [data-testid="stAlert"] * { color: #0f1519 !important; }
             [data-testid="stTabs"] button p { color: #0f1519 !important; }
+            [data-testid="stUploadedFile"] * { color: #0f1519 !important; }
+            .stSlider * { color: #0f1519 !important; }
+            [data-testid="stMetricLabel"] * { color: #0f1519 !important; }
             
             .hero-title { text-align: center; margin-top: 3rem; margin-bottom: 5px; font-size: 4.5rem; font-weight: 800; line-height: 1.2; }
             .hero-highlight { background: linear-gradient(90deg, #0d9488, #0891b2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -571,13 +574,14 @@ def main_dashboard():
         ])
         
         with t1:
+            chart_font_color = '#ffffff' if st.session_state.theme == 'Dark' else '#0f1519'
             col_a, col_b = st.columns(2)
             with col_a:
                 st.markdown("#### Metric Radar")
                 cats = list(res["metrics"].keys())[:-1]
                 vals = [res["metrics"][c] for c in cats]
                 fig = go.Figure(data=[go.Scatterpolar(r=vals, theta=cats, fill='toself', line_color='#2dd4bf')])
-                fig.update_layout(polar=dict(radialaxis=dict(visible=True, range=[0, 100])), paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='white', height=380)
+                fig.update_layout(polar=dict(radialaxis=dict(visible=True, range=[0, 100])), paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=chart_font_color, height=380)
                 st.plotly_chart(fig, use_container_width=True)
             with col_b:
                 st.markdown("#### Text Statistics")
@@ -588,7 +592,7 @@ def main_dashboard():
                 fig_bar.update_layout(
                     paper_bgcolor='rgba(0,0,0,0)',
                     plot_bgcolor='rgba(0,0,0,0)',
-                    font_color='white',
+                    font_color=chart_font_color,
                     height=380,
                     margin=dict(t=20, b=20)
                 )
