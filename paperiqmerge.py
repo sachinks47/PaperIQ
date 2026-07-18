@@ -116,181 +116,91 @@ if 'analysis_results' not in st.session_state:
 if 'summary_length_slider' not in st.session_state:
     st.session_state.summary_length_slider = "Medium"
 
-# CSS Styling (Teal Green & Animated Dark Mode)
-st.markdown("""
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+if 'theme' not in st.session_state:
+    st.session_state.theme = 'Dark'
 
-        /* Animated Background Effect */
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+def render_theme():
+    if st.session_state.theme == 'Dark':
+        return """
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+            @keyframes gradientBG {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+            [data-testid="stAppViewContainer"] {
+                background: linear-gradient(-45deg, #0a0f14, #0d1b22, #081217, #050a10);
+                background-size: 400% 400%;
+                animation: gradientBG 15s ease infinite;
+                color: #ffffff;
+                font-family: 'Inter', sans-serif;
+            }
+            [data-testid="stSidebar"] {
+                background-color: rgba(10, 15, 20, 0.95) !important;
+                border-right: 1px solid rgba(45, 212, 191, 0.1);
+            }
+            .hero-title { text-align: center; margin-top: 3rem; margin-bottom: 5px; font-size: 4.5rem; font-weight: 800; line-height: 1.2; }
+            .hero-highlight { background: linear-gradient(90deg, #2dd4bf, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+            .hero-subtitle { text-align: center; color: #8892b0; margin: 10px auto 40px auto; font-size: 1.15rem; font-weight: 400; max-width: 650px; }
+            div.stButton > button[kind="primary"] { background-color: #2dd4bf !important; color: #0f1519 !important; border: none !important; font-weight: 600 !important; border-radius: 8px !important; }
+            div.stButton > button[kind="secondary"] { background-color: rgba(255, 255, 255, 0.05) !important; color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; font-weight: 600 !important; border-radius: 8px !important; }
+            [data-testid="stFileUploadDropzone"] { border: 2px dashed rgba(45, 212, 191, 0.4) !important; background: rgba(45, 212, 191, 0.02) !important; border-radius: 12px !important; padding: 50px !important; min-height: 240px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+            [data-testid="stFileUploadDropzone"]:hover { border: 2px dashed rgba(45, 212, 191, 0.8) !important; background: rgba(45, 212, 191, 0.05) !important; }
+            .metric-card { background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 12px; text-align: center; border-left: 4px solid #2dd4bf; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+            .metric-label { font-size: 0.8rem; text-transform: uppercase; color: rgba(255, 255, 255, 0.5); font-weight: 600;}
+            .metric-value { font-size: 1.8rem; font-weight: 800; color: #ffffff; margin-top: 5px;}
+            .metric-caption { font-size: 0.75rem; color: #2dd4bf; margin-top: 4px; font-weight: 600; }
+            .sidebar-title { color: #2dd4bf; font-weight: 600; font-size: 1.3rem; border-bottom: 1px solid rgba(45, 212, 191, 0.2); padding-bottom: 10px; margin-bottom: 20px; }
+            .account-box { background: rgba(45, 212, 191, 0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(45, 212, 191, 0.2); }
+            .word-pill { display: inline-block; background: rgba(45, 212, 191, 0.1); color: #2dd4bf; padding: 5px 12px; border-radius: 20px; margin: 4px; font-size: 0.85rem; border: 1px solid rgba(45, 212, 191, 0.3); font-weight: 500; }
+            .role-tag { font-size: 0.7rem; background: #2dd4bf; color: #0f1519; padding: 2px 8px; border-radius: 4px; font-weight: bold; text-transform: uppercase; }
+            .export-section { background: rgba(45, 212, 191, 0.03); border: 1px dashed rgba(45, 212, 191, 0.2); border-radius: 12px; padding: 25px; text-align: center; margin-top: 30px; }
+            #MainMenu {visibility: hidden;} footer {visibility: hidden;}
+        </style>
+        """
+    else:
+        return """
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+            @keyframes gradientBG {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+            [data-testid="stAppViewContainer"] {
+                background: linear-gradient(-45deg, #f0f4f8, #f8fbfd, #e2e8f0, #edf2f7);
+                background-size: 400% 400%;
+                animation: gradientBG 15s ease infinite;
+                color: #0f1519;
+                font-family: 'Inter', sans-serif;
+            }
+            [data-testid="stSidebar"] {
+                background-color: rgba(255, 255, 255, 0.95) !important;
+                border-right: 1px solid rgba(45, 212, 191, 0.3);
+            }
+            [data-testid="stSidebar"] * { color: #0f1519 !important; }
+            .hero-title { text-align: center; margin-top: 3rem; margin-bottom: 5px; font-size: 4.5rem; font-weight: 800; line-height: 1.2; }
+            .hero-highlight { background: linear-gradient(90deg, #0d9488, #0891b2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+            .hero-subtitle { text-align: center; color: #475569; margin: 10px auto 40px auto; font-size: 1.15rem; font-weight: 400; max-width: 650px; }
+            div.stButton > button[kind="primary"] { background-color: #0d9488 !important; color: #ffffff !important; border: none !important; font-weight: 600 !important; border-radius: 8px !important; }
+            div.stButton > button[kind="secondary"] { background-color: rgba(0, 0, 0, 0.05) !important; color: #0f1519 !important; border: 1px solid rgba(0, 0, 0, 0.1) !important; font-weight: 600 !important; border-radius: 8px !important; }
+            [data-testid="stFileUploadDropzone"] { border: 2px dashed rgba(13, 148, 136, 0.4) !important; background: rgba(13, 148, 136, 0.02) !important; border-radius: 12px !important; padding: 50px !important; min-height: 240px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+            [data-testid="stFileUploadDropzone"]:hover { border: 2px dashed rgba(13, 148, 136, 0.8) !important; background: rgba(13, 148, 136, 0.05) !important; }
+            .metric-card { background: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 12px; text-align: center; border-left: 4px solid #0d9488; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+            .metric-label { font-size: 0.8rem; text-transform: uppercase; color: rgba(0, 0, 0, 0.6); font-weight: 600;}
+            .metric-value { font-size: 1.8rem; font-weight: 800; color: #0f1519; margin-top: 5px;}
+            .metric-caption { font-size: 0.75rem; color: #0d9488; margin-top: 4px; font-weight: 600; }
+            .sidebar-title { color: #0d9488 !important; font-weight: 600; font-size: 1.3rem; border-bottom: 1px solid rgba(13, 148, 136, 0.3); padding-bottom: 10px; margin-bottom: 20px; }
+            .account-box { background: rgba(13, 148, 136, 0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(13, 148, 136, 0.3); }
+            .word-pill { display: inline-block; background: rgba(13, 148, 136, 0.1); color: #0d9488; padding: 5px 12px; border-radius: 20px; margin: 4px; font-size: 0.85rem; border: 1px solid rgba(13, 148, 136, 0.3); font-weight: 600; }
+            .role-tag { font-size: 0.7rem; background: #0d9488; color: #ffffff !important; padding: 2px 8px; border-radius: 4px; font-weight: bold; text-transform: uppercase; }
+            .export-section { background: rgba(255, 255, 255, 0.6); border: 1px dashed rgba(13, 148, 136, 0.3); border-radius: 12px; padding: 25px; text-align: center; margin-top: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+            #MainMenu {visibility: hidden;} footer {visibility: hidden;}
+        </style>
+        """
 
-        [data-testid="stAppViewContainer"] {
-            background: linear-gradient(-45deg, #0a0f14, #0d1b22, #081217, #050a10);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: #ffffff;
-            font-family: 'Inter', sans-serif;
-        }
-        
-        [data-testid="stSidebar"] {
-            background-color: rgba(10, 15, 20, 0.95) !important;
-            border-right: 1px solid rgba(45, 212, 191, 0.1);
-        }
-
-        /* Hero Text Styling */
-        .hero-title { 
-            text-align: center; 
-            margin-top: 3rem;
-            margin-bottom: 5px; 
-            font-size: 4.5rem; 
-            font-weight: 800;
-            line-height: 1.2;
-        }
-        .hero-highlight {
-            background: linear-gradient(90deg, #2dd4bf, #06b6d4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .hero-subtitle { 
-            text-align: center; 
-            color: #8892b0; 
-            margin: 10px auto 40px auto; 
-            font-size: 1.15rem;
-            font-weight: 400;
-            max-width: 650px;
-        }
-
-        /* Buttons */
-        div.stButton > button[kind="primary"] {
-            background-color: #2dd4bf !important;
-            color: #0f1519 !important;
-            border: none !important;
-            font-weight: 600 !important;
-            border-radius: 8px !important;
-        }
-        div.stButton > button[kind="secondary"] {
-            background-color: rgba(255, 255, 255, 0.05) !important;
-            color: #ffffff !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            font-weight: 600 !important;
-            border-radius: 8px !important;
-        }
-
-        /* File Uploader Dropzone mimicking a large rectangle */
-        [data-testid="stFileUploadDropzone"] {
-            border: 2px dashed rgba(45, 212, 191, 0.4) !important;
-            background: rgba(45, 212, 191, 0.02) !important;
-            border-radius: 12px !important;
-            padding: 50px !important;
-            min-height: 240px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        [data-testid="stFileUploadDropzone"]:hover {
-            border: 2px dashed rgba(45, 212, 191, 0.8) !important;
-            background: rgba(45, 212, 191, 0.05) !important;
-        }
-
-        /* Miscellaneous Cards */
-        .glass-panel { padding: 20px; max-width: 500px; margin: auto; }
-
-        .metric-card {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            border-left: 4px solid #2dd4bf;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .metric-label { font-size: 0.8rem; text-transform: uppercase; color: rgba(255, 255, 255, 0.5); font-weight: 600;}
-        .metric-value { font-size: 1.8rem; font-weight: 800; color: #ffffff; margin-top: 5px;}
-        .metric-caption { font-size: 0.75rem; color: #2dd4bf; margin-top: 4px; font-weight: 600; }
-
-        .sidebar-title { 
-            color: #2dd4bf; font-weight: 600; font-size: 1.3rem; 
-            border-bottom: 1px solid rgba(45, 212, 191, 0.2);
-            padding-bottom: 10px; margin-bottom: 20px;
-        }
-
-        .account-box {
-            background: rgba(45, 212, 191, 0.05);
-            padding: 15px; border-radius: 10px;
-            border: 1px solid rgba(45, 212, 191, 0.2);
-        }
-
-        .word-pill {
-            display: inline-block;
-            background: rgba(45, 212, 191, 0.1);
-            color: #2dd4bf;
-            padding: 5px 12px;
-            border-radius: 20px;
-            margin: 4px;
-            font-size: 0.85rem;
-            border: 1px solid rgba(45, 212, 191, 0.3);
-            font-weight: 500;
-        }
-
-        .role-tag {
-            font-size: 0.7rem;
-            background: #2dd4bf;
-            color: #0f1519;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .export-section {
-            background: rgba(45, 212, 191, 0.03);
-            border: 1px dashed rgba(45, 212, 191, 0.2);
-            border-radius: 12px;
-            padding: 25px;
-            text-align: center;
-            margin-top: 30px;
-        }
-        
-        .summary-box {
-            background: rgba(45, 212, 191, 0.03);
-            border: 1px solid rgba(45, 212, 191, 0.15);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
-        }
-        
-        .summary-box:hover {
-            background: rgba(45, 212, 191, 0.08);
-            border-color: rgba(45, 212, 191, 0.4);
-        }
-        
-        .summary-title {
-            color: #2dd4bf;
-            font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 1.15rem;
-            border-bottom: 1px dashed rgba(45, 212, 191, 0.2);
-            padding-bottom: 8px;
-        }
-        
-        .summary-content {
-            color: #d1d5db;
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-
-        /* Hide default Streamlit elements that clutter */
-        #MainMenu {visibility: hidden;}
-        footer {visibility: hidden;}
-
-    </style>
-""", unsafe_allow_html=True)
+st.markdown(render_theme(), unsafe_allow_html=True)
 
 # -----------------------------
 # Core Logic Functions
@@ -465,6 +375,17 @@ def auth_page():
         </div>
     """, unsafe_allow_html=True)
     
+    col_theme, _, _ = st.columns([1, 4, 1])
+    with col_theme:
+        if st.toggle("☀ Light Mode", value=(st.session_state.theme == 'Light')):
+            if st.session_state.theme != 'Light':
+                st.session_state.theme = 'Light'
+                st.rerun()
+        else:
+            if st.session_state.theme != 'Dark':
+                st.session_state.theme = 'Dark'
+                st.rerun()
+    
     st.markdown("<br>", unsafe_allow_html=True)
     
     # Use columns to perfectly center the login panel
@@ -513,8 +434,18 @@ def auth_page():
 
 def main_dashboard():
     with st.sidebar:
-        st.markdown('<p style="font-weight:bold; font-size:1.5rem; color:#ffffff; margin-bottom: 20px;">✨ PaperIQ</p>', unsafe_allow_html=True)
-        st.markdown('<p class="sidebar-title">Profile</p>', unsafe_allow_html=True)
+        st.markdown('<p style="font-weight:bold; font-size:1.5rem; margin-bottom: 10px;">✨ PaperIQ</p>', unsafe_allow_html=True)
+        
+        if st.toggle("☀ Light Mode", value=(st.session_state.theme == 'Light')):
+            if st.session_state.theme != 'Light':
+                st.session_state.theme = 'Light'
+                st.rerun()
+        else:
+            if st.session_state.theme != 'Dark':
+                st.session_state.theme = 'Dark'
+                st.rerun()
+
+        st.markdown('<p class="sidebar-title" style="margin-top:20px;">Profile</p>', unsafe_allow_html=True)
         st.markdown(f"""<div class="account-box">
             <span class="role-tag">{st.session_state.user_data['role']}</span>
             <p style="margin:5px 0 0 0; font-weight:bold; color:#2dd4bf; font-size:1.1rem;">{st.session_state.user_data['username']}</p>
