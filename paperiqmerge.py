@@ -182,32 +182,42 @@ def render_theme():
             [data-testid="stSidebar"] * { color: #0f1519 !important; }
             
             /* Aggressively Force Light Mode Colors on Streamlit Natives */
-            .stMarkdown, .stText, .stAlert, .stSelectbox, .stTextInput { color: #0f1519 !important; }
             .stMarkdown p, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown span, .stMarkdown li { color: #0f1519 !important; }
+            [data-testid="stAlert"] * { color: #0f1519 !important; }
+            [data-testid="stTabs"] button p { color: #0f1519 !important; }
             
             .hero-title { text-align: center; margin-top: 3rem; margin-bottom: 5px; font-size: 4.5rem; font-weight: 800; line-height: 1.2; }
             .hero-highlight { background: linear-gradient(90deg, #0d9488, #0891b2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
             .hero-subtitle { text-align: center; color: #475569 !important; margin: 10px auto 40px auto; font-size: 1.15rem; font-weight: 400; max-width: 650px; }
             
-            div.stButton > button[kind="primary"] { background-color: #0d9488 !important; color: #ffffff !important; border: none !important; font-weight: 600 !important; border-radius: 8px !important; }
-            div.stButton > button[kind="secondary"] { background-color: rgba(0, 0, 0, 0.05) !important; color: #0f1519 !important; border: 1px solid rgba(0, 0, 0, 0.1) !important; font-weight: 600 !important; border-radius: 8px !important; }
+            /* All Buttons */
+            div.stButton > button, [data-testid="stDownloadButton"] > button { background-color: #0d9488 !important; color: #ffffff !important; border: none !important; font-weight: 600 !important; border-radius: 8px !important; }
+            div.stButton > button * , [data-testid="stDownloadButton"] > button * { color: #ffffff !important; }
+            div.stButton > button[kind="secondary"] { background-color: rgba(0, 0, 0, 0.05) !important; color: #0f1519 !important; border: 1px solid rgba(0, 0, 0, 0.1) !important; }
+            div.stButton > button[kind="secondary"] * { color: #0f1519 !important; }
             
-            [data-testid="stFileUploadDropzone"] { border: 2px dashed rgba(13, 148, 136, 0.4) !important; background-color: #ffffff !important; border-radius: 12px !important; padding: 50px !important; min-height: 240px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
-            [data-testid="stFileUploadDropzone"]:hover { border: 2px dashed rgba(13, 148, 136, 0.8) !important; background-color: #f8fafc !important; }
-            [data-testid="stFileUploadDropzone"] * { color: #0f1519 !important; }
+            /* File Uploader Fix */
+            div[data-testid="stFileUploader"] > section { background-color: #ffffff !important; border: 2px dashed rgba(13, 148, 136, 0.5) !important; border-radius: 12px !important; padding: 30px !important; transition: all 0.3s ease; }
+            div[data-testid="stFileUploader"] > section:hover { border: 2px dashed rgba(13, 148, 136, 0.9) !important; background-color: #f8fafc !important; }
+            div[data-testid="stFileUploader"] > section * { color: #0f1519 !important; }
+            div[data-testid="stFileUploader"] button { background-color: rgba(13, 148, 136, 0.1) !important; color: #0d9488 !important; border: 1px solid rgba(13, 148, 136, 0.2) !important; }
             
-            [data-testid="stExpander"] { background-color: rgba(255, 255, 255, 0.9) !important; border: 1px solid rgba(13, 148, 136, 0.2) !important; border-radius: 10px !important; }
+            /* Expander Fix */
+            [data-testid="stExpander"] { background-color: rgba(255, 255, 255, 0.95) !important; border: 1px solid rgba(13, 148, 136, 0.2) !important; border-radius: 10px !important; }
             [data-testid="stExpander"] details summary p { color: #0d9488 !important; font-weight: 600 !important; }
             [data-testid="stExpander"] * { color: #0f1519 !important; }
-            .metric-card { background: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 12px; text-align: center; border-left: 4px solid #0d9488; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+            
+            .metric-card { background: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 12px; text-align: center; border-left: 4px solid #0d9488; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
             .metric-label { font-size: 0.8rem; text-transform: uppercase; color: rgba(0, 0, 0, 0.6); font-weight: 600;}
             .metric-value { font-size: 1.8rem; font-weight: 800; color: #0f1519; margin-top: 5px;}
             .metric-caption { font-size: 0.75rem; color: #0d9488; margin-top: 4px; font-weight: 600; }
+            
             .sidebar-title { color: #0d9488 !important; font-weight: 600; font-size: 1.3rem; border-bottom: 1px solid rgba(13, 148, 136, 0.3); padding-bottom: 10px; margin-bottom: 20px; }
             .account-box { background: rgba(13, 148, 136, 0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(13, 148, 136, 0.3); }
             .word-pill { display: inline-block; background: rgba(13, 148, 136, 0.1); color: #0d9488; padding: 5px 12px; border-radius: 20px; margin: 4px; font-size: 0.85rem; border: 1px solid rgba(13, 148, 136, 0.3); font-weight: 600; }
             .role-tag { font-size: 0.7rem; background: #0d9488; color: #ffffff !important; padding: 2px 8px; border-radius: 4px; font-weight: bold; text-transform: uppercase; }
-            .export-section { background: rgba(255, 255, 255, 0.6); border: 1px dashed rgba(13, 148, 136, 0.3); border-radius: 12px; padding: 25px; text-align: center; margin-top: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+            .export-section { background: rgba(255, 255, 255, 0.8); border: 1px dashed rgba(13, 148, 136, 0.3); border-radius: 12px; padding: 25px; text-align: center; margin-top: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+            
             #MainMenu {visibility: hidden;} footer {visibility: hidden;}
         </style>
         """
