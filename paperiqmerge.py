@@ -17,16 +17,23 @@ from fpdf import FPDF
 # -----------------------------
 # Setup & Robustness Checks
 # -----------------------------
-# Ensure NLTK data is downloaded to prevent "MissingCorpusError" in TextBlob
+import os
+
+# Set up local NLTK data directory to avoid Streamlit Cloud permission errors
+nltk_dir = os.path.join(os.getcwd(), "nltk_data")
+os.makedirs(nltk_dir, exist_ok=True)
+if nltk_dir not in nltk.data.path:
+    nltk.data.path.append(nltk_dir)
+
 try:
     nltk.data.find('tokenizers/punkt')
 except LookupError:
-    nltk.download('punkt', quiet=True)
+    nltk.download('punkt', download_dir=nltk_dir, quiet=True)
     
 try:
     nltk.data.find('tokenizers/punkt_tab')
 except LookupError:
-    nltk.download('punkt_tab', quiet=True)
+    nltk.download('punkt_tab', download_dir=nltk_dir, quiet=True)
 
 # -----------------------------
 # Database Setup
