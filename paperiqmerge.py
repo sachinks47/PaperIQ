@@ -309,8 +309,9 @@ def analyze_linguistics(text):
     else:
         repetition_ratio = 0
         
-    plagiarism_risk = min(100, max(0, (repetition_ratio * 500) + ((1.0 - lex_div) * 50) + ((15 - burstiness) * 2 if burstiness < 15 else 0)))
-    originality = 100 - plagiarism_risk
+    plagiarism_risk = min(100, max(0, repetition_ratio * 800))
+    ai_risk = min(100, max(0, ((1.0 - lex_div) * 100) + ((15 - burstiness) * 3 if burstiness < 15 else 0)))
+    originality = max(0, 100 - (plagiarism_risk * 0.5 + ai_risk * 0.5))
     
     composite = (lang_score * 0.25) + (coherence * 0.2) + (reasoning * 0.15) + (sophistication * 0.15) + (readability * 0.1) + (originality * 0.15)
     
@@ -329,7 +330,9 @@ def analyze_linguistics(text):
             "Sentences": len(sents),
             "Avg Sent Len": round(avg_sent_len, 2),
             "Avg Word Len": round(avg_word_len, 2),
-            "Sentiment": round(sentiment, 2)
+            "Sentiment": round(sentiment, 2),
+            "Plagiarism Risk": round(plagiarism_risk, 1),
+            "AI Content Risk": round(ai_risk, 1)
         },
         "long_sentences": [str(s) for s in sents if len(s.words) > 35][:5]
     }
@@ -579,8 +582,7 @@ def main_dashboard():
         m1.markdown(f'<div class="metric-card"><div class="metric-label">Composite</div><div class="metric-value">{res["metrics"]["Composite"]}</div></div>', unsafe_allow_html=True)
         m2.markdown(f'<div class="metric-card"><div class="metric-label">Words</div><div class="metric-value">{res["stats"]["Word Count"]:,}</div></div>', unsafe_allow_html=True)
         m3.markdown(f'<div class="metric-card"><div class="metric-label">Sentences</div><div class="metric-value">{res["stats"]["Sentences"]}</div></div>', unsafe_allow_html=True)
-        risk_pct = round(100 - res["metrics"]["Originality"], 1)
-        m4.markdown(f'<div class="metric-card"><div class="metric-label">Originality</div><div class="metric-value">{res["metrics"]["Originality"]}</div><div class="metric-caption">⚠️ {risk_pct}% Plagiarism Risk</div></div>', unsafe_allow_html=True)
+        m4.markdown(f'<div class="metric-card"><div class="metric-label">Originality</div><div class="metric-value">{res["metrics"]["Originality"]}</div><div class="metric-caption">⚠️ {res["stats"]["AI Content Risk"]}% AI • {res["stats"]["Plagiarism Risk"]}% Plag</div></div>', unsafe_allow_html=True)
         m5.markdown(f'<div class="metric-card"><div class="metric-label">Sentiment</div><div class="metric-value">{s_val}</div><div class="metric-caption">{s_label}</div></div>', unsafe_allow_html=True)
 
         st.markdown("### 🏷️ Lexical Keywords")
@@ -633,6 +635,8 @@ def main_dashboard():
                     <p style="margin: 0; line-height: 1.8;"><strong>Sophistication:</strong> {res['metrics']['Sophistication']}/100</p>
                     <p style="margin: 0; line-height: 1.8;"><strong>Readability:</strong> {res['metrics']['Readability']}/100</p>
                     <p style="margin: 0; line-height: 1.8;"><strong>Originality (ML):</strong> {res['metrics']['Originality']}/100</p>
+                    <p style="margin: 0; line-height: 1.8;"><strong>AI Content Risk:</strong> {res['stats']['AI Content Risk']}%</p>
+                    <p style="margin: 0; line-height: 1.8;"><strong>Plagiarism Risk:</strong> {res['stats']['Plagiarism Risk']}%</p>
                 </div>
                 <hr style="border-color: rgba(45, 212, 191, 0.2); margin: 12px 0;">
                 <p style="text-align: center; margin: 0;"><strong>Overall Tone:</strong> {s_label}</p>
